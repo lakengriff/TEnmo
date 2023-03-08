@@ -34,18 +34,33 @@ public class JdbcTransferDao implements TransferDao{
     @Override
     public List<Transfer> viewTransferHistory(int accountId){
         List<Transfer> transferList = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer WHERE account_from = ? OR account_to = ?";
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE (account_from = ? OR account_to = ?) AND transfer_status = 'Approved'";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
-        
-
+        while(result.next()){
+            transferList.add(mapRowToTransfer(result));
+        }
         return transferList;
     }
 
     @Override
-    public List<Transfer> viewPendingTransfers(String userName){return new ArrayList<>();}
+    public List<Transfer> viewPendingTransfers(int accountId){
+        List<Transfer> transferList = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE account_from = ? AND transfer_status = 'Pending'";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
+        while(result.next()){
+            transferList.add(mapRowToTransfer(result));
+        }
+        return transferList;
+    }
 
     @Override
-    public int createRequest (Transfer transfer){return 0;}
+    public int createRequest (Transfer transfer){
+        Integer newId = 0;
+        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to) VALUES (?,?,?,?,?,?) RETURNING transfer_id";
+         newId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFromId(), transfer.getAccountToId());
+
+        return newId;
+    }
 
     @Override
     public boolean acceptRequest (Transfer transfer){return true;}
@@ -72,4 +87,6 @@ public class JdbcTransferDao implements TransferDao{
 
         return transfer;
     }
+
+
 }

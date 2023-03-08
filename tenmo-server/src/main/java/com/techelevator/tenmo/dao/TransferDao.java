@@ -12,7 +12,7 @@ public interface TransferDao {
 
     List<Transfer> viewTransferHistory(int accountId);
 
-    List<Transfer> viewPendingTransfers(String userName);
+    List<Transfer> viewPendingTransfers(int accountId);
 
     int createRequest (Transfer transfer);
 
