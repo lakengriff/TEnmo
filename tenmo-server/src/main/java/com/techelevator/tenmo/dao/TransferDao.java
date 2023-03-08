@@ -10,7 +10,7 @@ public interface TransferDao {
 
     BigDecimal viewCurrentBalance(String userName);
 
-    List<Transfer> viewTransferHistory(String userName);
+    List<Transfer> viewTransferHistory(int accountId);
 
     List<Transfer> viewPendingTransfers(String userName);
 

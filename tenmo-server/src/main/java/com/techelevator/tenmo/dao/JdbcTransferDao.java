@@ -32,8 +32,12 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     @Override
-    public List<Transfer> viewTransferHistory(String userName){
+    public List<Transfer> viewTransferHistory(int accountId){
         List<Transfer> transferList = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer WHERE account_from = ? OR account_to = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
+        
+
         return transferList;
     }
 
@@ -54,4 +58,18 @@ public class JdbcTransferDao implements TransferDao{
 
     @Override
     public List<Account> viewUsersToSendTo (String userName){return new ArrayList<>();}
+
+    private Transfer mapRowToTransfer(SqlRowSet rowSet) {
+        Transfer transfer = new Transfer();
+        transfer.setTransferId(rowSet.getInt("transfer_id"));
+        transfer.setAccountFromId(rowSet.getInt("account_from"));
+        transfer.setAccountToId(rowSet.getInt("account_to"));
+        transfer.setAmount(rowSet.getBigDecimal("amount"));
+        transfer.setTransferStatusId(rowSet.getInt("transfer_status_id"));
+        transfer.setTransferTypeId(rowSet.getInt("transfer_type_id"));
+        transfer.setTransferStatus(rowSet.getString("transfer_status_desc"));
+        transfer.setTransferType(rowSet.getString("transfer_type_desc"));
+
+        return transfer;
+    }
 }
