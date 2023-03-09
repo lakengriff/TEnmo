@@ -10,7 +10,7 @@ public interface TransferDao {
 
     int createRequest (Transfer transfer);
 
-    boolean changeRequestStatus (Transfer transfer, String newStatus);
+    boolean changeRequestStatus (Transfer transfer, int newStatus);
 
 //    boolean rejectRequest(Transfer transfer);
 

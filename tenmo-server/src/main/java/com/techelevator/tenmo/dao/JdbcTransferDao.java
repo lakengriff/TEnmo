@@ -24,19 +24,19 @@ public class JdbcTransferDao implements TransferDao{
     @Override
     public int createRequest (Transfer transfer){
         Integer newId = 0;
-        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to) VALUES (?,?,?,?,?,?) RETURNING transfer_id";
-         newId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFromId(), transfer.getAccountToId());
+        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?,?,?,?,?) RETURNING transfer_id";
+         newId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFromId(), transfer.getAccountToId(), transfer.getAmount());
 
         return newId;
     }
 
     @Override
-    public boolean changeRequestStatus (Transfer transfer, String newStatus){
+    public boolean changeRequestStatus (Transfer transfer, int newStatus){
         boolean success = false;
         try{
-            String sql = "UPDATE transfer_status SET transfer_status_id = (SELECT transfer_status_id FROM transfer_status WHERE transfer_status_desc = '?') WHERE transaction_id = ?";
+            String sql = "UPDATE transfer SET transfer_status_id = ? WHERE transfer_id = ?";
             jdbcTemplate.update(sql, newStatus, transfer.getTransferId());
-            if(newStatus.equals("Approved")) {
+            if(newStatus == 2) {
                 transferMoney(transfer);
             }
             success = true;

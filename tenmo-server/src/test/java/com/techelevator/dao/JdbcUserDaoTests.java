@@ -112,4 +112,13 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         actualUser.setPassword(newUser.getPassword()); // reset password back to unhashed password for testing
         Assert.assertEquals(newUser, actualUser);
     }
+
+    @Test
+    public void viewUsersToSendTo_should_return_all_other_usernames(){
+        int expected = 2;
+        List<String> usernames = sut.viewUsersToSendTo("user1");
+        int actual = usernames.size();
+
+        Assert.assertEquals(expected, actual);
+    }
 }

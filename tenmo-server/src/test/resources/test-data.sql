@@ -79,4 +79,9 @@ INSERT INTO account (user_id,balance) VALUES ('1001', 1500.00);
 INSERT INTO account (user_id,balance) VALUES ('1002', 2000.00);
 INSERT INTO account (user_id,balance) VALUES ('1003', 2500.00);
 
+INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (1, 1, 2001, 2003, 500.00);
+INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (1, 2, 2002, 2003, 50.00);
+INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (2, 2, 2003, 2001, 5.00);
+INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (2, 2, 2001, 2002, 5.00);
+
 COMMIT TRANSACTION;

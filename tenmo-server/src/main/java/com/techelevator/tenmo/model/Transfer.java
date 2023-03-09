@@ -15,15 +15,12 @@ public class Transfer {
     public Transfer() {
     }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFromId, int accountToId, BigDecimal amount, String transferStatus, String transferType) {
-        this.transferId = transferId;
+    public Transfer(int transferTypeId, int transferStatusId, int accountFromId, int accountToId, BigDecimal amount) {
         this.transferTypeId = transferTypeId;
         this.transferStatusId = transferStatusId;
         this.accountFromId = accountFromId;
         this.accountToId = accountToId;
         this.amount = amount;
-        this.transferStatus = transferStatus;
-        this.transferType = transferType;
     }
 
     public int getTransferId() {
@@ -74,19 +71,4 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public String getTransferStatus() {
-        return transferStatus;
-    }
-
-    public void setTransferStatus(String transferStatus) {
-        this.transferStatus = transferStatus;
-    }
-
-    public String getTransferType() {
-        return transferType;
-    }
-
-    public void setTransferType(String transferType) {
-        this.transferType = transferType;
-    }
 }

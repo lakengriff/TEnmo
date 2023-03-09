@@ -8,11 +8,10 @@ import java.util.List;
 
 public interface AccountDao {
 
-    BigDecimal viewCurrentBalance(String userName);
+    BigDecimal viewCurrentBalance(int acountId);
 
     List<Transfer> viewTransferHistory(int accountId);
 
     List<Transfer> viewPendingTransfers(int accountId);
 
-    List<String> viewUsersToSendTo (String userName);
 }

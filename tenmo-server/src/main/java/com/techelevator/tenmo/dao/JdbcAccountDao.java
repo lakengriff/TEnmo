@@ -21,10 +21,10 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public BigDecimal viewCurrentBalance(String username){
-        BigDecimal resultDecimal = null;
-        String sql = "SELECT balance FROM account AS a JOIN tenmo_user AS u ON a.user_id = u.user_id WHERE u.username = ?";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, username);
+    public BigDecimal viewCurrentBalance(int accountId){
+        BigDecimal resultDecimal = new BigDecimal("0.00");
+        String sql = "SELECT balance FROM account WHERE account_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
         if(result.next()){
             resultDecimal = result.getBigDecimal("balance");
         }
@@ -34,8 +34,8 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Transfer> viewTransferHistory(int accountId){
         List<Transfer> transferList = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE (account_from = ? OR account_to = ?) AND transfer_status = 'Approved'";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
+        String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, t.account_from, t.account_to, t.amount FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id  WHERE (t.account_from = ? OR t.account_to = ?) AND ts.transfer_status_desc = 'Approved'";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId, accountId);
         while(result.next()){
             transferList.add(mapRowToTransfer(result));
         }
@@ -45,7 +45,7 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Transfer> viewPendingTransfers(int accountId){
         List<Transfer> transferList = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, transfer_id FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE account_from = ? AND transfer_status = 'Pending'";
+        String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, t.account_from, t.account_to, t.amount FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE t.account_from = ? AND ts.transfer_status_desc = 'Pending'";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
         while(result.next()){
             transferList.add(mapRowToTransfer(result));
@@ -53,16 +53,6 @@ public class JdbcAccountDao implements AccountDao {
         return transferList;
     }
 
-    @Override
-    public List<String> viewUsersToSendTo (String userName){
-        List<String> usersList = new ArrayList<>();
-        String sql = "SELECT username FROM tenmo_user WHERE username != ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
-        while(results.next()){
-            usersList.add(results.getString("username"));
-        }
-        return usersList;
-    }
 
     private Transfer mapRowToTransfer(SqlRowSet rowSet) {
         Transfer transfer = new Transfer();
@@ -72,8 +62,6 @@ public class JdbcAccountDao implements AccountDao {
         transfer.setAmount(rowSet.getBigDecimal("amount"));
         transfer.setTransferStatusId(rowSet.getInt("transfer_status_id"));
         transfer.setTransferTypeId(rowSet.getInt("transfer_type_id"));
-        transfer.setTransferStatus(rowSet.getString("transfer_status_desc"));
-        transfer.setTransferType(rowSet.getString("transfer_type_desc"));
 
         return transfer;
     }
