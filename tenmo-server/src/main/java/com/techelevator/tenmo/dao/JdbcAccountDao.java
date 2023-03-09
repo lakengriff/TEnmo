@@ -5,6 +5,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 
@@ -51,6 +52,19 @@ public class JdbcAccountDao implements AccountDao {
             transferList.add(mapRowToTransfer(result));
         }
         return transferList;
+    }
+    @Override
+    public int findAccountIdByUsername(String username) {
+        if (username == null) throw new IllegalArgumentException("Username cannot be null");
+
+        int accountId;
+        try {
+            accountId = jdbcTemplate.queryForObject("SELECT account_id FROM account JOIN tenmo_user ON account.user_id = tenmo_user.user_id WHERE username = ?", int.class, username);
+        } catch (NullPointerException | EmptyResultDataAccessException e) {
+            throw new UsernameNotFoundException("User " + username + " was not found.");
+        }
+
+        return accountId;
     }
 
 

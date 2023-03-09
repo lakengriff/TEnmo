@@ -14,4 +14,6 @@ public interface AccountDao {
 
     List<Transfer> viewPendingTransfers(int accountId);
 
+    public int findAccountIdByUsername(String username);
+
 }
