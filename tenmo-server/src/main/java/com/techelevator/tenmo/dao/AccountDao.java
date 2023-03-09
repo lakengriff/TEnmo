@@ -16,4 +16,6 @@ public interface AccountDao {
 
     public int findAccountIdByUsername(String username);
 
+    public Account getAccountById(int id);
+
 }

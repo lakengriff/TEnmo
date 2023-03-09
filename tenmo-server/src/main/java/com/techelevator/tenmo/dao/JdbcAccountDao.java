@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +20,17 @@ public class JdbcAccountDao implements AccountDao {
 
     public JdbcAccountDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Account getAccountById(int accountId) {
+        String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId);
+        if (results.next()) {
+            return mapRowToAccount(results);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -78,5 +90,14 @@ public class JdbcAccountDao implements AccountDao {
         transfer.setTransferTypeId(rowSet.getInt("transfer_type_id"));
 
         return transfer;
+    }
+
+    private Account mapRowToAccount(SqlRowSet rowSet){
+        Account account = new Account();
+        account.setAccountId(rowSet.getInt("account_id"));
+        account.setBalance(rowSet.getBigDecimal("balance"));
+        account.setUserId(rowSet.getInt("user_id"));
+
+        return account;
     }
 }

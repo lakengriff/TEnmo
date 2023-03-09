@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("/account/{username}/")
+@RequestMapping("/account/")
 @RestController
 @PreAuthorize("isAuthenticated()")
 
@@ -29,18 +29,18 @@ public class AccountController {
     }
 
     @RequestMapping(path = "transfer-history", method = RequestMethod.GET)
-    public List<Transfer> transferHistory(@PathVariable String username){
-        return accountService.viewTransferHistoryService(username);
+    public List<Transfer> transferHistoryControl(Principal principal){
+        return accountService.viewTransferHistoryService(principal.getName());
     }
 
     @RequestMapping(path = "balance", method = RequestMethod.GET)
-    public BigDecimal viewBalance(@PathVariable String username){
-        return accountService.viewBalanceService(username);
+    public BigDecimal viewBalanceControl(Principal principal){
+        return accountService.viewBalanceService(principal.getName());
     }
 
     @RequestMapping(path = "pending-requests", method = RequestMethod.GET)
-    public List<Transfer> pendingRequests(@PathVariable String username){
-        return accountService.viewPendingTransferService(username);
+    public List<Transfer> pendingRequestsControl(Principal principal){
+        return accountService.viewPendingTransferService(principal.getName());
     }
 
 }
