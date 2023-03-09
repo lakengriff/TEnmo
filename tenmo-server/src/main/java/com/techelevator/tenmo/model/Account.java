@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 public class Account{
         int accountId;
         int userId;
-        BigDecimal balance = new BigDecimal("0.00");
+        BigDecimal balance;
 
         public Account() {
         }

@@ -63,7 +63,7 @@ public class JdbcTransferDao implements TransferDao{
     public boolean transferMoney(Transfer transfer){
         boolean success = false;
         try {
-            String sql = "START TRANSACTION; UPDATE account SET balance = (balance - ?) WHERE account_id = ?; UPDATE account SET balance = (balance + ?) WHERE account_id = ?; COMMIT;";
+            String sql = "START TRANSACTION; UPDATE account SET balance = (balance - ?) WHERE account_id = ?; UPDATE account SET balance = (balance + ?) WHERE account_id = ?; COMMIT TRANSACTION;";
             jdbcTemplate.update(sql, transfer.getAmount(), transfer.getAccountFromId(), transfer.getAmount(), transfer.getAccountToId());
             success = true;
         } catch (IllegalArgumentException e){
