@@ -8,19 +8,12 @@ import java.util.List;
 
 public interface TransferDao {
 
-    BigDecimal viewCurrentBalance(String userName);
-
-    List<Transfer> viewTransferHistory(int accountId);
-
-    List<Transfer> viewPendingTransfers(int accountId);
-
     int createRequest (Transfer transfer);
 
-    boolean acceptRequest (Transfer transfer);
+    boolean changeRequestStatus (Transfer transfer, String newStatus);
 
-    boolean rejectRequest(Transfer transfer);
+//    boolean rejectRequest(Transfer transfer);
 
     boolean transferMoney(Transfer transfer);
 
-    List<Account> viewUsersToSendTo (String userName);
 }
