@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class JdbcAccountDao implements AccountDao {
@@ -79,6 +81,17 @@ public class JdbcAccountDao implements AccountDao {
         return accountId;
     }
 
+    @Override
+    public List<User> viewUsersToSendTo (String userName){
+        List<User> usersList = new ArrayList<>();
+        String sql = "SELECT user_id, username FROM tenmo_user WHERE username != ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
+        while(results.next()){
+            usersList.add(mapRowToUser(results));
+        }
+        return usersList;
+    }
+
 
     private Transfer mapRowToTransfer(SqlRowSet rowSet) {
         Transfer transfer = new Transfer();
@@ -99,5 +112,13 @@ public class JdbcAccountDao implements AccountDao {
         account.setUserId(rowSet.getInt("user_id"));
 
         return account;
+    }
+
+    private User mapRowToUser(SqlRowSet rowSet){
+        User user = new User();
+        user.setId(rowSet.getInt("user_id"));
+        user.setUsername(rowSet.getString("username"));
+
+        return user;
     }
 }

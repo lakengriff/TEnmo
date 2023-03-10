@@ -32,6 +32,6 @@ public class TransferController {
 
     @RequestMapping(path = "", method = RequestMethod.PUT)
     public boolean changeRequestStatusControl(@Valid @RequestBody Transfer transfer, int newStatus, Principal principal){
-       return transferService.changeRequestStatusService(transfer, newStatus, principal.getName());
+       return transferService.changeRequestStatusService(transfer, principal.getName());
     }
 }

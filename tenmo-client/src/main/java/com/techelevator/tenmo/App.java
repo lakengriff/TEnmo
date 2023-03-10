@@ -1,9 +1,15 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+import com.techelevator.tenmo.services.TransferService;
+
+import java.util.Map;
 
 public class App {
 
@@ -11,6 +17,8 @@ public class App {
 
     private final ConsoleService consoleService = new ConsoleService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
+    private final AccountService accountService = new AccountService(API_BASE_URL);
+    private final TransferService transferService = new TransferService(API_BASE_URL);
 
     private AuthenticatedUser currentUser;
 
@@ -55,7 +63,10 @@ public class App {
     private void handleLogin() {
         UserCredentials credentials = consoleService.promptForCredentials();
         currentUser = authenticationService.login(credentials);
-        if (currentUser == null) {
+        if (currentUser != null) {
+            accountService.setAuthToken(currentUser.getToken());
+            transferService.setAuthToken(currentUser.getToken());
+        } else {
             consoleService.printErrorMessage();
         }
     }
@@ -85,28 +96,55 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
-		
+        System.out.println("Your current account balance is: $" + accountService.viewBalance());
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+        Transfer[] transfers = accountService.viewTransferHistory();
+        int accountId = accountService.getAccountId();
+        System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
+        for(Transfer transfer : transfers){
+            if(accountId == transfer.getAccountToId()) {
+                System.out.println(transfer.getTransferId() + "          From: " + transfer.getAccountFromId() + "          " + "$" + transfer.getAmount());
+            } else if (accountId == transfer.getAccountFromId()){
+                System.out.println(transfer.getTransferId() + "          To: " + transfer.getAccountToId() + "          " + "$" + transfer.getAmount());
+            }
+        }
 	}
 
 	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-		
+        Transfer[] requests = accountService.viewPendingRequests();
+        System.out.println("-------------------------------------------\n" +
+                "Pending Transfers\n" +
+                "ID          To                     Amount\n" +
+                "-------------------------------------------");
+        for(Transfer request: requests){
+            System.out.println(request.getTransferId() + "          " + request.getAccountToId() + "          " + "$" + request.getAmount());
+        }
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-		
+        printOtherUsers();
+//        Console Service Method to Prompt for Input
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
+		printOtherUsers();
+//        Console Service Method to Prompt for Input
 	}
 
+    private void printOtherUsers(){
+        User[] otherUsers = accountService.getOtherUsers();
+        System.out.println("-------------------------------------------\n" +
+                "Users\n" +
+                "ID          Name\n" +
+                "-------------------------------------------");
+        for(User user : otherUsers){
+            System.out.println(user.getId() + "         " + user.getUsername());
+        }
+        System.out.println("---------");
+    }
+
 }
+
+// TODO: add additional functionality to views (extra transfer details and accepting/rejecting requests)

@@ -34,12 +34,12 @@ public class TransferService {
         return -1;
     }
 
-    public boolean changeRequestStatusService(Transfer transfer, int newStatus, String username){
+    public boolean changeRequestStatusService(Transfer transfer, String username){
         if(transfer.getAccountFromId() == jdbcAccountDao.findAccountIdByUsername(username)) {
             Account fromAccount = jdbcAccountDao.getAccountById(transfer.getAccountFromId());
             if (transfer.getAccountFromId() != transfer.getAccountToId()) {
-                if (newStatus == 3 || (fromAccount.getBalance().compareTo(transfer.getAmount()) > -1)) {
-                    return jdbcTransferDao.changeRequestStatus(transfer, newStatus);
+                if (transfer.getTransferStatusId() == 3 || (fromAccount.getBalance().compareTo(transfer.getAmount()) > -1)) {
+                    return jdbcTransferDao.changeRequestStatus(transfer);
                 }
                 return false;
             }

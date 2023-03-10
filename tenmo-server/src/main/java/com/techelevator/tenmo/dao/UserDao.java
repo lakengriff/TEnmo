@@ -16,5 +16,4 @@ public interface UserDao {
 
     boolean create(String username, String password);
 
-    List<String> viewUsersToSendTo (String userName);
 }

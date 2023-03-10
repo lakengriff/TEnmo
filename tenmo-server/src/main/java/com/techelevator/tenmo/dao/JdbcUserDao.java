@@ -97,16 +97,6 @@ public class JdbcUserDao implements UserDao {
         return true;
     }
 
-    @Override
-    public List<String> viewUsersToSendTo (String userName){
-        List<String> usersList = new ArrayList<>();
-        String sql = "SELECT username FROM tenmo_user WHERE username != ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
-        while(results.next()){
-            usersList.add(results.getString("username"));
-        }
-        return usersList;
-    }
 
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();

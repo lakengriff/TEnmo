@@ -36,7 +36,8 @@ public class JdbcTransferDaoTests extends BaseDaoTests {
 
     @Test
     public void changeRequestStatus_changes_request_status(){
-        boolean result = sut.changeRequestStatus(transfer2, 2);
+        transfer2.setTransferStatusId(2);
+        boolean result = sut.changeRequestStatus(transfer2);
         Assert.assertTrue(result);
     }
 

@@ -33,12 +33,12 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     @Override
-    public boolean changeRequestStatus (Transfer transfer, int newStatus){
+    public boolean changeRequestStatus (Transfer transfer){
         boolean success = false;
         try{
             String sql = "UPDATE transfer SET transfer_status_id = ? WHERE transfer_id = ?";
-            jdbcTemplate.update(sql, newStatus, transfer.getTransferId());
-            if(newStatus == 2) {
+            jdbcTemplate.update(sql, transfer.getTransferStatusId(), transfer.getTransferId());
+            if(transfer.getTransferStatusId() == 2) {
                 transferMoney(transfer);
             }
             success = true;
