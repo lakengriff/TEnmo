@@ -92,6 +92,17 @@ public class JdbcAccountDao implements AccountDao {
         return usersList;
     }
 
+    @Override
+    public String getUsernameByAccountId(int id){
+        String username = null;
+        String sql = "SELECT username FROM tenmo_user AS u JOIN account AS a ON u.user_id = a.user_id WHERE a.account_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+        if(results.next()){
+            username = results.getString("username");
+        }
+        return username;
+    }
+
 
     private Transfer mapRowToTransfer(SqlRowSet rowSet) {
         Transfer transfer = new Transfer();

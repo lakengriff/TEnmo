@@ -22,4 +22,6 @@ public interface AccountDao {
 
     public List<User> viewUsersToSendTo (String userName);
 
+    public String getUsernameByAccountId (int accountId);
+
 }

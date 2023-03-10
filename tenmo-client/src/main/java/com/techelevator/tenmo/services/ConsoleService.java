@@ -84,6 +84,13 @@ public class ConsoleService {
         scanner.nextLine();
     }
 
+    public void printPendingMenu(){
+        System.out.println("1: Approve");
+        System.out.println("2: Reject");
+        System.out.println("0: Don't approve or reject");
+        System.out.println("---------");
+    }
+
     public void printErrorMessage() {
         System.out.println("An error occurred. Check the log for details.");
     }

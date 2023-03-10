@@ -7,10 +7,7 @@ import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.services.AccountService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -56,5 +53,10 @@ public class AccountController {
     @RequestMapping(path = "request-users")
     public List<User> getUsersToTransferBetween(Principal principal){
         return dao.viewUsersToSendTo(principal.getName());
+    }
+
+    @RequestMapping(path = "request-username", method = RequestMethod.GET)
+    public String getUsernameFromAccountId(@RequestBody int accountId){
+        return dao.getUsernameByAccountId(accountId);
     }
 }
