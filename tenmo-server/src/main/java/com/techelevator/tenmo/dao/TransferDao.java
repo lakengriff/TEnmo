@@ -16,4 +16,6 @@ public interface TransferDao {
 
     boolean transferMoney(Transfer transfer);
 
+    Transfer transferDetails(int transferId);
+
 }

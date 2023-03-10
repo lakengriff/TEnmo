@@ -49,7 +49,7 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Transfer> viewTransferHistory(int accountId){
         List<Transfer> transferList = new ArrayList<>();
-        String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, t.account_from, t.account_to, t.amount FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id  WHERE (t.account_from = ? OR t.account_to = ?) AND ts.transfer_status_desc = 'Approved'";
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE (account_from = ? OR account_to = ?) AND transfer_status_id = 2";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId, accountId);
         while(result.next()){
             transferList.add(mapRowToTransfer(result));
@@ -60,7 +60,7 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Transfer> viewPendingTransfers(int accountId){
         List<Transfer> transferList = new ArrayList<>();
-        String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, t.account_from, t.account_to, t.amount FROM transfer AS t JOIN transfer_status AS ts ON t.transfer_status_id = ts.transfer_status_id WHERE t.account_from = ? AND ts.transfer_status_desc = 'Pending'";
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from,account_to, amount FROM transfer WHERE account_from = ? AND transfer_status_id = 1";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
         while(result.next()){
             transferList.add(mapRowToTransfer(result));

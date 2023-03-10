@@ -109,7 +109,7 @@ public class App {
             } else if (accountId == transfer.getAccountFromId()){
                 System.out.println(transfer.getTransferId() + "          To: " + transfer.getAccountToId() + "          " + "$" + transfer.getAmount());
             }
-        }
+        }int targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
 	}
 
 	private void viewPendingRequests() {
@@ -143,6 +143,10 @@ public class App {
             System.out.println(user.getId() + "         " + user.getUsername());
         }
         System.out.println("---------");
+    }
+
+    private void getTransferDetails(int transferId){
+
     }
 
 }

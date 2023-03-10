@@ -4,10 +4,7 @@ import com.techelevator.tenmo.dao.JdbcTransferDao;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.services.TransferService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -33,5 +30,11 @@ public class TransferController {
     @RequestMapping(path = "", method = RequestMethod.PUT)
     public boolean changeRequestStatusControl(@Valid @RequestBody Transfer transfer, int newStatus, Principal principal){
        return transferService.changeRequestStatusService(transfer, principal.getName());
+    }
+    //possibly update the following path variable
+    @RequestMapping(path = "transfer-details/{id}", method = RequestMethod.GET)
+    public Transfer transferDetails(@PathVariable int transferId){
+       return jdbcTransferDao.transferDetails(transferId);
+
     }
 }
