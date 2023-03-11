@@ -60,8 +60,13 @@ public class AccountController {
         return dao.getUsernameByAccountId(accountId);
     }
 
-    @RequestMapping(path = "user-id-to-account-id", method = RequestMethod.GET)
-    public int accountId(@RequestBody int userId){
-        return dao.getAccountIdByUserId(userId);
+//    @RequestMapping(path = "user-to-account", method = RequestMethod.GET)
+//    public Account getAccountFromUser(@RequestBody User user){
+//        return dao.getAccountByUser(user.getId());
+//    }
+
+    @RequestMapping(path = "request-accounts", method = RequestMethod.GET)
+    public List<Account> getAccountsToTransferBetween(Principal principal){
+        return dao.viewAccountsToTransferBetween(principal.getName());
     }
 }

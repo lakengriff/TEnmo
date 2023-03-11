@@ -25,7 +25,7 @@ public class TransferService {
     public int createRequest(Transfer newTransfer){
         int returnedTransferId = 0;
         try{
-            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "account/transfer", HttpMethod.POST, makeTransferEntity(newTransfer), Integer.class);
+            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "account/transfer/", HttpMethod.POST, makeTransferEntity(newTransfer), Integer.class);
             returnedTransferId = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException | NullPointerException e) {
             BasicLogger.log(e.getMessage());

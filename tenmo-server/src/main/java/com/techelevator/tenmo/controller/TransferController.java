@@ -31,7 +31,7 @@ public class TransferController {
     public boolean changeRequestStatusControl(@Valid @RequestBody Transfer transfer, int newStatus, Principal principal){
        return transferService.changeRequestStatusService(transfer, principal.getName());
     }
-    //possibly update the following path variable
+
     @RequestMapping(path = "transfer-details/{id}", method = RequestMethod.GET)
     public Transfer transferDetails(@PathVariable int transferId){
        return jdbcTransferDao.transferDetails(transferId);

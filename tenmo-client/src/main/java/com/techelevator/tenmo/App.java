@@ -1,9 +1,6 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
@@ -111,31 +108,31 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-        Transfer[] transfers = accountService.viewTransferHistory();
-        List<Integer> transferIds = new ArrayList<>();
-        for(Transfer transfer : transfers){
-            transferIds.add(transfer.getTransferId());
-        }
-
-        int accountId = accountService.getAccountId();
-        System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
-        for(Transfer transfer : transfers){
-            if(accountId == transfer.getAccountToId()) {
-                System.out.println(transfer.getTransferId() + "          From: " + transfer.getAccountFromId() + "          " + "$" + transfer.getAmount());
-            } else if (accountId == transfer.getAccountFromId()){
-                System.out.println(transfer.getTransferId() + "          To: " + transfer.getAccountToId() + "          " + "$" + transfer.getAmount());
-            }
-        }
-        int targetId = -1;
-        while (targetId != 0) {
-            targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
-            if (transferIds.contains(targetId)) {
-                getTransferDetails(targetId);
-                targetId = 0;
-            } else {
-                System.out.println("Invalid ID. Please try again.");
-            }
-        }
+//        Transfer[] transfers = accountService.viewTransferHistory();
+//        List<Integer> transferIds = new ArrayList<>();
+//        for(Transfer transfer : transfers){
+//            transferIds.add(transfer.getTransferId());
+//        }
+//
+//        int accountId = accountService.getAccountId();
+//        System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
+//        for(Transfer transfer : transfers){
+//            if(accountId == transfer.getAccountToId()) {
+//                System.out.println(transfer.getTransferId() + "          From: " + accountService.getUsernameByAccountId(transfer.getAccountFromId()) + "          " + "$" + transfer.getAmount());
+//            } else if (accountId == transfer.getAccountFromId()){
+//                System.out.println(transfer.getTransferId() + "          To: " + accountService.getUsernameByAccountId(transfer.getAccountToId()) + "          " + "$" + transfer.getAmount());
+//            }
+//        }
+//        int targetId = -1;
+//        while (targetId != 0) {
+//            targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
+//            if (transferIds.contains(targetId)) {
+//                getTransferDetails(targetId);
+//                targetId = 0;
+//            } else {
+//                System.out.println("Invalid ID. Please try again.");
+//            }
+//        }
 	}
 
 	private void viewPendingRequests() {
@@ -185,11 +182,18 @@ public class App {
 	}
 
 	private void sendBucks() {
-        printOtherUsers();
+        Account[] accounts = printOtherUsers();
         int userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
         if(userId != 0) {
             BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount: ");
-            Transfer newTransfer = new Transfer(TRANSFER_TYPE_SEND_CODE, TRANSFER_STATUS_APPROVED_CODE, accountService.getAccountId(), accountService.getAccountIdByUserId(userId), transferAmount);
+            Account account = null;
+            for(int i = 0; i < accounts.length; i++){
+                if(accounts[i].getUserId() == userId){
+                    account = accounts[i];
+                }
+            }
+//            ADD IF CONDITIONAL SO ACCOUNT ISNT NULL LMAO
+            Transfer newTransfer = new Transfer(TRANSFER_TYPE_SEND_CODE, TRANSFER_STATUS_APPROVED_CODE, accountService.getAccountId(), account.getAccountId(), transferAmount);
             transferService.createRequest(newTransfer);
         }
 	}
@@ -204,8 +208,9 @@ public class App {
         }
 	}
 
-    private void printOtherUsers(){
+    private Account[] printOtherUsers(){
         User[] otherUsers = accountService.getOtherUsers();
+        Account[] otherAccounts = accountService.getOtherAccounts();
         System.out.println("-------------------------------------------\n" +
                 "Users\n" +
                 "ID          Name\n" +
@@ -214,38 +219,39 @@ public class App {
             System.out.println(user.getId() + "         " + user.getUsername());
         }
         System.out.println("---------");
+        return otherAccounts;
     }
 
-    private void getTransferDetails(int transferId){
-        Transfer transfer = transferService.getTransferDetails(transferId);
-        System.out.println("--------------------------------------------\n" +
-                "Transfer Details\n" +
-                "--------------------------------------------");
-        System.out.println("Id: " + transfer.getTransferId());
-        System.out.println("From: " + accountService.getUsernameByAccountId(transfer.getAccountFromId()));
-        System.out.println("To: " + accountService.getUsernameByAccountId(transfer.getAccountToId()));
-        switch(transfer.getTransferTypeId()){
-            case TRANSFER_TYPE_SEND_CODE:
-                System.out.println("Type: Send");
-                break;
-            case TRANSFER_TYPE_REQUEST_CODE:
-                System.out.println("Type: Request");
-                break;
-        }
-        switch(transfer.getTransferStatusId()){
-            case TRANSFER_STATUS_PENDING_CODE:
-                System.out.println("Status: Pending");
-                break;
-            case TRANSFER_STATUS_APPROVED_CODE:
-                System.out.println("Status: Approved");
-                break;
-            case TRANSFER_STATUS_REJECTED_CODE:
-                System.out.println("Status: rejected");
-                break;
-        }
-        System.out.println("Amount: $" + transfer.getAmount());
-    }
+//    private void getTransferDetails(int transferId){
+//        Transfer transfer = transferService.getTransferDetails(transferId);
+//        System.out.println("--------------------------------------------\n" +
+//                "Transfer Details\n" +
+//                "--------------------------------------------");
+//        System.out.println("Id: " + transfer.getTransferId());
+//        System.out.println("From: " + accountService.getUsernameByAccountId(transfer.getAccountFromId()));
+//        System.out.println("To: " + accountService.getUsernameByAccountId(transfer.getAccountToId()));
+//        switch(transfer.getTransferTypeId()){
+//            case TRANSFER_TYPE_SEND_CODE:
+//                System.out.println("Type: Send");
+//                break;
+//            case TRANSFER_TYPE_REQUEST_CODE:
+//                System.out.println("Type: Request");
+//                break;
+//        }
+//        switch(transfer.getTransferStatusId()){
+//            case TRANSFER_STATUS_PENDING_CODE:
+//                System.out.println("Status: Pending");
+//                break;
+//            case TRANSFER_STATUS_APPROVED_CODE:
+//                System.out.println("Status: Approved");
+//                break;
+//            case TRANSFER_STATUS_REJECTED_CODE:
+//                System.out.println("Status: rejected");
+//                break;
+//        }
+//        System.out.println("Amount: $" + transfer.getAmount());
+//
+//    }
 
 }
 
-// TODO: add additional functionality to views (extra transfer details and accepting/rejecting requests)
