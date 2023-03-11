@@ -53,6 +53,17 @@ public class TransferService {
         }return transfer;
     }
 
+    public String getOtherUser(int transferId){
+        String username = null;
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/other-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            username = response.getBody();
+        }catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return username;
+    }
+
 
 
 

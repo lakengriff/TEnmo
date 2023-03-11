@@ -37,4 +37,9 @@ public class TransferController {
        return jdbcTransferDao.transferDetails(transferId);
 
     }
+    @RequestMapping(path = "other-username/{id}", method = RequestMethod.GET)
+    public String otherUserName(@PathVariable int id, Principal principal){
+       return transferService.getOtherUsername(id, principal.getName());
+    }
+
 }

@@ -47,4 +47,16 @@ public class TransferService {
         }
         return false;
     }
+
+    public String getOtherUsername(int transferId, String userName){
+        int selfAccountId = jdbcAccountDao.findAccountIdByUsername(userName);
+        String otherUser = null;
+        Transfer transfer = jdbcTransferDao.transferDetails(transferId);
+        if(selfAccountId == transfer.getAccountFromId()){
+           otherUser = jdbcTransferDao.getToUserName(transferId);
+        }else if(selfAccountId == transfer.getAccountToId()){
+            otherUser = jdbcTransferDao.getFromUserName(transferId);
+        }
+        return  otherUser;
+    }
 }

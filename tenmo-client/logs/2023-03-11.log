@@ -33,3 +33,4 @@
 2023-03-11T16:25:01.1267866 500 : [{"timestamp":"2023-03-11T21:25:01.102+00:00","status":500,"error":"Internal Server Error","message":"PreparedStatementCallback; bad SQL grammar [SELECT account_id, user_id, balance FROM account AS a J... (425 bytes)]
 2023-03-11T16:25:27.6459334 500 : [{"timestamp":"2023-03-11T21:25:27.625+00:00","status":500,"error":"Internal Server Error","message":"PreparedStatementCallback; bad SQL grammar [SELECT account_id, user_id, balance FROM account AS a J... (425 bytes)]
 2023-03-11T16:28:06.0276078 I/O error on POST request for "http://localhost:8080/login": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2023-03-11T18:29:37.2442743 500 : [{"timestamp":"2023-03-11T23:29:37.223+00:00","status":500,"error":"Internal Server Error","message":"PreparedStatementCallback; bad SQL grammar [SELECT transfer_id, transfer_type_id, transfer_status_i... (446 bytes)]

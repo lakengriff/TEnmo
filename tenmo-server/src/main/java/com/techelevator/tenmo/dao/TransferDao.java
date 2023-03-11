@@ -18,4 +18,8 @@ public interface TransferDao {
 
     Transfer transferDetails(int transferId);
 
+   String getFromUserName(int transferId);
+
+    public String getToUserName(int transferId);
+
 }

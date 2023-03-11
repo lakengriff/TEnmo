@@ -119,9 +119,9 @@ public class App {
         System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
         for(Transfer transfer : transfers){
             if(accountId == transfer.getAccountToId()) {
-                System.out.println(transfer.getTransferId() + "          From: " + transfer.getAccountFromId() + "          " + "$" + transfer.getAmount());
+                System.out.println(transfer.getTransferId() + "          From: " + transferService.getOtherUser(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
             } else if (accountId == transfer.getAccountFromId()){
-                System.out.println(transfer.getTransferId() + "          To: " + transfer.getAccountToId() + "          " + "$" + transfer.getAmount());
+                System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUser(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
             }
         }
         int targetId = -1;
@@ -183,7 +183,8 @@ public class App {
 	}
 
 	private void sendBucks() {
-        Account[] accounts = printOtherUsers();
+        printOtherUsers();
+        Account[] accounts = accountService.getOtherAccounts();
         int userId = -1;
         while (userId != 0) {
             userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
@@ -207,17 +208,28 @@ public class App {
             }
 	}
 
-	private void requestBucks() {
-		printOtherUsers();
-        int userId = consoleService.promptForInt("Enter ID of user you are requesting from (0 to cancel): ");
-        if(userId != 0) {
-            BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount: ");
-            Transfer newTransfer = new Transfer(TRANSFER_TYPE_REQUEST_CODE, TRANSFER_STATUS_PENDING_CODE, userId, accountService.getAccountId(), transferAmount);
-            transferService.createRequest(newTransfer);
+	private void requestBucks() {printOtherUsers();
+        Account[] accounts = accountService.getOtherAccounts();
+        int userId = -1;
+        while (userId != 0) {
+            userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
+            Account account = null;
+            for (int i = 0; i < accounts.length; i++) {
+                if (accounts[i].getUserId() == userId) {
+                    account = accounts[i];
+                    BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount: ");
+                    Transfer newTransfer = new Transfer(TRANSFER_TYPE_REQUEST_CODE, TRANSFER_STATUS_PENDING_CODE, account.getAccountId(),accountService.getAccountId(), transferAmount);
+                    transferService.createRequest(newTransfer);
+                    userId = 0;
+                    }
+            }
+            if(account == null) {
+                System.out.println("Invalid ID. Try again.");
+            }
         }
 	}
 
-    private Account[] printOtherUsers(){
+    private User[] printOtherUsers(){
         User[] otherUsers = accountService.getOtherUsers();
         Account[] otherAccounts = accountService.getOtherAccounts();
         System.out.println("-------------------------------------------\n" +
@@ -228,7 +240,7 @@ public class App {
             System.out.println(user.getId() + "         " + user.getUsername());
         }
         System.out.println("---------");
-        return otherAccounts;
+        return otherUsers;
     }
 
 //    private void getTransferDetails(int transferId){
@@ -263,4 +275,3 @@ public class App {
 //    }
 
 }
-
