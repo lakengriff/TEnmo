@@ -24,4 +24,6 @@ public interface AccountDao {
 
     public String getUsernameByAccountId (int accountId);
 
+    public int getAccountIdByUserId(int userId);
+
 }

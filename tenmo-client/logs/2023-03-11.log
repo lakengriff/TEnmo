@@ -1,0 +1,11 @@
+2023-03-11T12:47:53.4588845 I/O error on POST request for "http://localhost:8080/login": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2023-03-11T12:48:05.4349051 I/O error on POST request for "http://localhost:8080/register": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2023-03-11T13:17:38.9686914 404 : [{"timestamp":"2023-03-11T18:17:38.939+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]
+2023-03-11T13:18:56.8188184 404 : [{"timestamp":"2023-03-11T18:18:56.816+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]
+2023-03-11T13:46:33.8661892 404 : [{"timestamp":"2023-03-11T18:46:33.846+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]
+2023-03-11T13:50:47.0184675 401 : [no body]
+2023-03-11T13:53:45.5443482 404 : [{"timestamp":"2023-03-11T18:53:42.762+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]
+2023-03-11T14:08:30.6821698 400 : [{"timestamp":"2023-03-11T19:08:30.654+00:00","status":400,"error":"Bad Request","message":"Required request body is missing: public int com.techelevator.tenmo.controller.AccountController.accountId(int)","path":"/account/user-id-to-account-id"}]
+2023-03-11T14:08:41.679706 404 : [{"timestamp":"2023-03-11T19:08:39.866+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]
+2023-03-11T14:12:19.7806412 400 : [{"timestamp":"2023-03-11T19:12:19.762+00:00","status":400,"error":"Bad Request","message":"Required request body is missing: public int com.techelevator.tenmo.controller.AccountController.accountId(int)","path":"/account/user-id-to-account-id"}]
+2023-03-11T14:12:51.2175435 404 : [{"timestamp":"2023-03-11T19:12:35.005+00:00","status":404,"error":"Not Found","message":"No message available","path":"/account/transfer"}]

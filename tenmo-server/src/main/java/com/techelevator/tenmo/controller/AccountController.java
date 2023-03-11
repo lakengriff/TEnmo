@@ -59,4 +59,9 @@ public class AccountController {
     public String getUsernameFromAccountId(@RequestBody int accountId){
         return dao.getUsernameByAccountId(accountId);
     }
+
+    @RequestMapping(path = "user-id-to-account-id", method = RequestMethod.GET)
+    public int accountId(@RequestBody int userId){
+        return dao.getAccountIdByUserId(userId);
+    }
 }

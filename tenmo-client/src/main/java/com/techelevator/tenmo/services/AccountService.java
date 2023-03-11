@@ -84,11 +84,23 @@ public class AccountService {
     public String getUsernameByAccountId(int id){
         String result = null;
         try{
-            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/request-username", HttpMethod.GET, makeAccountIdEntity(id), String.class);
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/request-username", HttpMethod.GET, makeIdEntity(id), String.class);
+            result = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
         return result;
+    }
+
+    public int getAccountIdByUserId(int userId){
+        int accountId = 0;
+        try{
+            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "account/user-id-to-account-id", HttpMethod.GET, makeIdEntity(userId), Integer.class);
+            accountId = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return accountId;
     }
 
 
@@ -98,7 +110,7 @@ public class AccountService {
         return new HttpEntity<>(headers);
     }
 
-    private HttpEntity<Integer> makeAccountIdEntity(int id) {
+    private HttpEntity<Integer> makeIdEntity(int id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
         headers.setContentType(MediaType.APPLICATION_JSON);

@@ -3,6 +3,7 @@ package com.techelevator.tenmo.services;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.util.BasicLogger;
 import org.springframework.http.*;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +25,8 @@ public class TransferService {
     public int createRequest(Transfer newTransfer){
         int returnedTransferId = 0;
         try{
-            returnedTransferId = restTemplate.postForObject(baseUrl + "account/transfer", makeTransferEntity(newTransfer), Integer.class);
+            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "account/transfer", HttpMethod.POST, makeTransferEntity(newTransfer), Integer.class);
+            returnedTransferId = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException | NullPointerException e) {
             BasicLogger.log(e.getMessage());
         }return  returnedTransferId;

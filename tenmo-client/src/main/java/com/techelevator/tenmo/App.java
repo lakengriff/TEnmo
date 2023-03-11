@@ -11,6 +11,8 @@ import com.techelevator.tenmo.services.TransferService;
 import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -184,12 +186,22 @@ public class App {
 
 	private void sendBucks() {
         printOtherUsers();
-//        Console Service Method to Prompt for Input
+        int userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
+        if(userId != 0) {
+            BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount: ");
+            Transfer newTransfer = new Transfer(TRANSFER_TYPE_SEND_CODE, TRANSFER_STATUS_APPROVED_CODE, accountService.getAccountId(), accountService.getAccountIdByUserId(userId), transferAmount);
+            transferService.createRequest(newTransfer);
+        }
 	}
 
 	private void requestBucks() {
 		printOtherUsers();
-//        Console Service Method to Prompt for Input
+        int userId = consoleService.promptForInt("Enter ID of user you are requesting from (0 to cancel): ");
+        if(userId != 0) {
+            BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount: ");
+            Transfer newTransfer = new Transfer(TRANSFER_TYPE_REQUEST_CODE, TRANSFER_STATUS_PENDING_CODE, userId, accountService.getAccountId(), transferAmount);
+            transferService.createRequest(newTransfer);
+        }
 	}
 
     private void printOtherUsers(){

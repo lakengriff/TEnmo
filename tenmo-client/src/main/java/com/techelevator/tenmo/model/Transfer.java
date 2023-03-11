@@ -10,8 +10,7 @@ public class Transfer {
     int accountFromId;
     int accountToId;
     BigDecimal amount = new BigDecimal("0.00");
-    String transferStatus;
-    String transferType;
+
 
     public Transfer() {
     }

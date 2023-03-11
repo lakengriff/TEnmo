@@ -103,6 +103,17 @@ public class JdbcAccountDao implements AccountDao {
         return username;
     }
 
+    @Override
+    public int getAccountIdByUserId(int userId){
+        int accountId = 0;
+        String sql = "SELECT account_id FROM account WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        if(results.next()){
+            accountId = results.getInt("account_id");
+        }
+        return accountId;
+    }
+
 
     private Transfer mapRowToTransfer(SqlRowSet rowSet) {
         Transfer transfer = new Transfer();
