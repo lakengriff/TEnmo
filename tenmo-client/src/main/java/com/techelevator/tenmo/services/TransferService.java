@@ -46,14 +46,14 @@ public class TransferService {
     public Transfer getTransferDetails(int transferId) {
         Transfer transfer = null;
         try {
-            ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "account/transfer/transfer-details/{id}", HttpMethod.GET, makeAuthEntity(), Transfer.class);
+            ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "account/transfer/transfer-details/" + transferId, HttpMethod.GET, makeAuthEntity(), Transfer.class);
             transfer = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }return transfer;
     }
 
-    public String getOtherUser(int transferId){
+    public String getOtherUserName(int transferId){
         String username = null;
         try {
             ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/other-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
@@ -64,8 +64,27 @@ public class TransferService {
         return username;
     }
 
+    public String getFromUserName(int transferId){
+        String username = null;
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/from-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            username = response.getBody();
+        }catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return username;
+    }
 
-
+    public String getToUserName(int transferId){
+        String username = null;
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/to-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            username = response.getBody();
+        }catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return username;
+    }
 
     private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
         HttpHeaders headers = new HttpHeaders();

@@ -93,16 +93,16 @@ public class AccountService {
         return result;
     }
 
-    public String getUsernameByAccountId(Account account){
-        String result = null;
-        try{
-            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/request-username", HttpMethod.GET, makeAccountEntity(account), String.class);
-            result = response.getBody();
-        } catch (RestClientResponseException | ResourceAccessException e) {
-            BasicLogger.log(e.getMessage());
-        }
-        return result;
-    }
+//    public String getUsernameByAccountId(Account account){
+//        String result = null;
+//        try{
+//            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/request-username", HttpMethod.GET, makeAccountEntity(account), String.class);
+//            result = response.getBody();
+//        } catch (RestClientResponseException | ResourceAccessException e) {
+//            BasicLogger.log(e.getMessage());
+//        }
+//        return result;
+//    }
 
 //    public int getAccountIdByUser(User user){
 //        int accountId = -1;

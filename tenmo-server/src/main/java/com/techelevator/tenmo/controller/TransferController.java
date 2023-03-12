@@ -33,13 +33,23 @@ public class TransferController {
     }
 
     @RequestMapping(path = "transfer-details/{id}", method = RequestMethod.GET)
-    public Transfer transferDetails(@PathVariable int transferId){
-       return jdbcTransferDao.transferDetails(transferId);
+    public Transfer transferDetails(@PathVariable int id){
+       return jdbcTransferDao.transferDetails(id);
 
     }
+
     @RequestMapping(path = "other-username/{id}", method = RequestMethod.GET)
-    public String otherUserName(@PathVariable int id, Principal principal){
-       return transferService.getOtherUsername(id, principal.getName());
+    public String otherUserNameControl(@PathVariable int id, Principal principal){
+       return transferService.getOtherUsernameService(id, principal.getName());
     }
 
+    @RequestMapping(path = "from-username/{id}", method = RequestMethod.GET)
+    public String getFromUserNameControl(@PathVariable int id){
+        return jdbcTransferDao.getFromUserName(id);
+    }
+
+    @RequestMapping(path = "to-username/{id}", method = RequestMethod.GET)
+    public String getToUserNameControl(@PathVariable int id){
+        return jdbcTransferDao.getToUserName(id);
+    }
 }

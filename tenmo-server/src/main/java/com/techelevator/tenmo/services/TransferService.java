@@ -48,8 +48,8 @@ public class TransferService {
         return false;
     }
 
-    public String getOtherUsername(int transferId, String userName){
-        int selfAccountId = jdbcAccountDao.findAccountIdByUsername(userName);
+    public String getOtherUsernameService(int transferId, String username){
+        int selfAccountId = jdbcAccountDao.findAccountIdByUsername(username);
         String otherUser = null;
         Transfer transfer = jdbcTransferDao.transferDetails(transferId);
         if(selfAccountId == transfer.getAccountFromId()){
@@ -58,5 +58,17 @@ public class TransferService {
             otherUser = jdbcTransferDao.getFromUserName(transferId);
         }
         return  otherUser;
+    }
+
+    public String getMyUsernameService(int transferId, String username){
+        int selfAccountId = jdbcAccountDao.findAccountIdByUsername(username);
+        String myUsername = null;
+        Transfer transfer = jdbcTransferDao.transferDetails(transferId);
+        if(selfAccountId == transfer.getAccountFromId()){
+            myUsername = jdbcTransferDao.getFromUserName(transferId);
+        }else if(selfAccountId == transfer.getAccountToId()){
+            myUsername = jdbcTransferDao.getToUserName(transferId);
+        }
+        return  myUsername;
     }
 }

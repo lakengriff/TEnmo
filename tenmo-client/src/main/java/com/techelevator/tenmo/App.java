@@ -119,16 +119,16 @@ public class App {
         System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
         for(Transfer transfer : transfers){
             if(accountId == transfer.getAccountToId()) {
-                System.out.println(transfer.getTransferId() + "          From: " + transferService.getOtherUser(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
+                System.out.println(transfer.getTransferId() + "          From: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
             } else if (accountId == transfer.getAccountFromId()){
-                System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUser(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
+                System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
             }
         }
         int targetId = -1;
         while (targetId != 0) {
             targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
             if (transferIds.contains(targetId)) {
-//                getTransferDetails(targetId);
+                getTransferDetails(targetId);
                 targetId = 0;
             } else {
                 System.out.println("Invalid ID. Please try again.");
@@ -139,48 +139,63 @@ public class App {
 	private void viewPendingRequests() {
         Transfer[] requests = accountService.viewPendingRequests();
         List<Integer> transferIds = new ArrayList<>();
-        for(Transfer request : requests){
+        for (Transfer request : requests) {
             transferIds.add(request.getTransferId());
         }
-
+        int targetId = -1;
+        while (targetId != 0) {
         System.out.println("-------------------------------------------\n" +
                 "Pending Transfers\n" +
                 "ID          To                     Amount\n" +
                 "-------------------------------------------");
-        for(Transfer request: requests){
-            System.out.println(request.getTransferId() + "          " + request.getAccountToId() + "          " + "$" + request.getAmount());
+        for (Transfer request : requests) {
+            System.out.println(request.getTransferId() + "          " + transferService.getOtherUserName(request.getTransferId()) + "          " + "$" + request.getAmount());
         }
-        int targetId = -1;
-        while (targetId != 0){
             targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
-            if(transferIds.contains(targetId)){
-                Transfer transferToUpdate = transferService.getTransferDetails(targetId);
-                int pendingMenuSelection = -1;
-                while(pendingMenuSelection != 0){
-                    consoleService.printPendingMenu();
-                    pendingMenuSelection = consoleService.promptForInt("Please choose an option: ");
-                    switch (pendingMenuSelection){
-                        case 1:
-                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_APPROVED_CODE);
-                            transferService.changeRequestStatus(transferToUpdate);
-                            pendingMenuSelection = 0;
-                            break;
-                        case 2:
-                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_REJECTED_CODE);
-                            transferService.changeRequestStatus(transferToUpdate);
-                            pendingMenuSelection = 0;
-                            break;
-                        default:
-                            System.out.println("Invalid option. Please try again.");
-                            break;
-                    }
-                }
-                targetId = 0;
-            } else {
-                System.out.println("Invalid ID. Please try again.");
+            if (transferIds.contains(targetId)) {
+                targetId = changeRequestStatus();
+            } else{
+                System.out.println("Invalid ID. Try again.");
             }
         }
-	}
+    }
+
+    public int changeRequestStatus(){
+        return 0;
+    }
+
+//        int targetId = -1;
+//        while (targetId != 0){
+//            targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
+//            if(transferIds.contains(targetId)){
+//                Transfer transferToUpdate = transferService.getTransferDetails(targetId);
+//                int pendingMenuSelection = -1;
+//                while(pendingMenuSelection != 0){
+//                    consoleService.printPendingMenu();
+//                    pendingMenuSelection = consoleService.promptForInt("Please choose an option: ");
+//                    switch (pendingMenuSelection){
+//                        case 1:
+//                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_APPROVED_CODE);
+//                            transferService.changeRequestStatus(transferToUpdate);
+//                            pendingMenuSelection = 0;
+//                            break;
+//                        case 2:
+//                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_REJECTED_CODE);
+//                            transferService.changeRequestStatus(transferToUpdate);
+//                            pendingMenuSelection = 0;
+//                            break;
+//                        default:
+//                            System.out.println("Invalid option. Please try again.");
+//                            break;
+//                    }
+//                }
+//                targetId = 0;
+//            } else {
+//                System.out.println("Invalid ID. Please try again.");
+//            }
+//        }
+
+
 
 	private void sendBucks() {
         printOtherUsers();
@@ -208,7 +223,8 @@ public class App {
             }
 	}
 
-	private void requestBucks() {printOtherUsers();
+	private void requestBucks() {
+        printOtherUsers();
         Account[] accounts = accountService.getOtherAccounts();
         int userId = -1;
         while (userId != 0) {
@@ -243,35 +259,35 @@ public class App {
         return otherUsers;
     }
 
-//    private void getTransferDetails(int transferId){
-//        Transfer transfer = transferService.getTransferDetails(transferId);
-//        System.out.println("--------------------------------------------\n" +
-//                "Transfer Details\n" +
-//                "--------------------------------------------");
-//        System.out.println("Id: " + transfer.getTransferId());
-//        System.out.println("From: " + accountService.getUsernameByAccountId(transfer.getAccountFromId()));
-//        System.out.println("To: " + accountService.getUsernameByAccountId(transfer.getAccountToId()));
-//        switch(transfer.getTransferTypeId()){
-//            case TRANSFER_TYPE_SEND_CODE:
-//                System.out.println("Type: Send");
-//                break;
-//            case TRANSFER_TYPE_REQUEST_CODE:
-//                System.out.println("Type: Request");
-//                break;
-//        }
-//        switch(transfer.getTransferStatusId()){
-//            case TRANSFER_STATUS_PENDING_CODE:
-//                System.out.println("Status: Pending");
-//                break;
-//            case TRANSFER_STATUS_APPROVED_CODE:
-//                System.out.println("Status: Approved");
-//                break;
-//            case TRANSFER_STATUS_REJECTED_CODE:
-//                System.out.println("Status: rejected");
-//                break;
-//        }
-//        System.out.println("Amount: $" + transfer.getAmount());
-//
-//    }
+    private void getTransferDetails(int transferId){
+        Transfer transfer = transferService.getTransferDetails(transferId);
+        System.out.println("--------------------------------------------\n" +
+                "Transfer Details\n" +
+                "--------------------------------------------");
+        System.out.println("Id: " + transfer.getTransferId());
+            System.out.println("From: " + transferService.getFromUserName(transferId));
+            System.out.println("To: " + transferService.getToUserName(transferId));
+        switch(transfer.getTransferTypeId()){
+            case TRANSFER_TYPE_SEND_CODE:
+                System.out.println("Type: Send");
+                break;
+            case TRANSFER_TYPE_REQUEST_CODE:
+                System.out.println("Type: Request");
+                break;
+        }
+        switch(transfer.getTransferStatusId()){
+            case TRANSFER_STATUS_PENDING_CODE:
+                System.out.println("Status: Pending");
+                break;
+            case TRANSFER_STATUS_APPROVED_CODE:
+                System.out.println("Status: Approved");
+                break;
+            case TRANSFER_STATUS_REJECTED_CODE:
+                System.out.println("Status: rejected");
+                break;
+        }
+        System.out.println("Amount: $" + transfer.getAmount());
+
+    }
 
 }
