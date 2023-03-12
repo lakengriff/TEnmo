@@ -99,4 +99,23 @@ public class ConsoleService {
         System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
     }
 
+    public void printPendingTransfersHeader(){
+        System.out.println("-------------------------------------------\n" +
+                "Pending Transfers\n" +
+                "ID          To                     Amount\n" +
+                "-------------------------------------------");
+    }
+
+    public void printOtherUsersHeader(){
+        System.out.println("-------------------------------------------\n" +
+                "Users\n" +
+                "ID          Name\n" +
+                "-------------------------------------------");
+    }
+
+    public void printTransferDetailsHeader(){
+        System.out.println("--------------------------------------------\n" +
+                "Transfer Details\n" +
+                "--------------------------------------------");
+    }
 }

@@ -114,17 +114,9 @@ public class App {
         for(Transfer transfer : transfers){
             transferIds.add(transfer.getTransferId());
         }
-
         int accountId = accountService.getAccountId();
-        System.out.println("------------------------------------------- \n Transfers \n ID          From/To                 Amount \n -------------------------------------------");
-        for(Transfer transfer : transfers){
-            if(accountId == transfer.getAccountToId()) {
-                System.out.println(transfer.getTransferId() + "          From: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
-            } else if (accountId == transfer.getAccountFromId()){
-                System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
-            }
-        }
-
+        consoleService.printTransferHistoryHeader();
+        viewTransfers(transfers, accountId);
         int targetId = -1;
         while (targetId != 0) {
             targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
@@ -137,6 +129,16 @@ public class App {
         }
 	}
 
+    private void viewTransfers(Transfer[] transfers, int accountId){
+        for(Transfer transfer : transfers){
+            if(accountId == transfer.getAccountToId()) {
+                System.out.println(transfer.getTransferId() + "          From: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
+            } else if (accountId == transfer.getAccountFromId()){
+                System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
+            }
+        }
+    }
+
 	private void viewPendingRequests() {
         Transfer[] requests = accountService.viewPendingRequests();
         List<Integer> transferIds = new ArrayList<>();
@@ -145,19 +147,20 @@ public class App {
         }
         int targetId = -1;
         while (targetId != 0) {
-        System.out.println("-------------------------------------------\n" +
-                "Pending Transfers\n" +
-                "ID          To                     Amount\n" +
-                "-------------------------------------------");
-        for (Transfer request : requests) {
-            System.out.println(request.getTransferId() + "          " + transferService.getOtherUserName(request.getTransferId()) + "          " + "$" + request.getAmount());
-        }
+        consoleService.printPendingTransfersHeader();
+        getPending(requests);
             targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
             if (transferIds.contains(targetId)) {
                 targetId = changeRequestStatus(transferService.getTransferDetails(targetId));
             } else if (targetId != 0){
                 System.out.println("Invalid ID. Try again.");
             }
+        }
+    }
+
+    private void getPending(Transfer[] requests){
+        for (Transfer request : requests) {
+            System.out.println(request.getTransferId() + "          " + transferService.getOtherUserName(request.getTransferId()) + "          " + "$" + request.getAmount());
         }
     }
 
@@ -238,10 +241,7 @@ public class App {
     private User[] printOtherUsers(){
         User[] otherUsers = accountService.getOtherUsers();
         Account[] otherAccounts = accountService.getOtherAccounts();
-        System.out.println("-------------------------------------------\n" +
-                "Users\n" +
-                "ID          Name\n" +
-                "-------------------------------------------");
+        consoleService.printOtherUsersHeader();
         for(User user : otherUsers){
             System.out.println(user.getId() + "         " + user.getUsername());
         }
@@ -251,9 +251,7 @@ public class App {
 
     private void getTransferDetails(int transferId){
         Transfer transfer = transferService.getTransferDetails(transferId);
-        System.out.println("--------------------------------------------\n" +
-                "Transfer Details\n" +
-                "--------------------------------------------");
+        consoleService.printTransferHistoryHeader();
         System.out.println("Id: " + transfer.getTransferId());
             System.out.println("From: " + transferService.getFromUserName(transferId));
             System.out.println("To: " + transferService.getToUserName(transferId));
