@@ -3,13 +3,14 @@ package com.techelevator.tenmo.controller;
 import com.techelevator.tenmo.dao.JdbcTransferDao;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.services.TransferService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 
-@RequestMapping("/account/transfer/")
+@RequestMapping("/transfer/")
 @RestController
 @PreAuthorize("isAuthenticated()")
 
@@ -22,6 +23,7 @@ public class TransferController {
         this.transferService = transferService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "", method = RequestMethod.POST)
     public int createRequestControl(@Valid @RequestBody Transfer transfer, Principal principal){
        return transferService.createRequestService(transfer, principal.getName());

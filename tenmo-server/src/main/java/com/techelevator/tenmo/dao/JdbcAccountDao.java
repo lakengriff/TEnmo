@@ -103,17 +103,6 @@ public class JdbcAccountDao implements AccountDao {
         return username;
     }
 
-//    @Override
-//    public Account getAccountByUser(int userId){
-//        Account account = null;
-//        String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id = ?";
-//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-//        if(results.next()){
-//            account = mapRowToAccount(results);
-//        }
-//        return account;
-//    }
-
     public List<Account> viewAccountsToTransferBetween(String username){
         List<Account> accountsList = new ArrayList<>();
         String sql = "SELECT account_id, u.user_id, balance FROM account AS a JOIN tenmo_user AS u ON a.user_id = u.user_id WHERE u.username != ?";

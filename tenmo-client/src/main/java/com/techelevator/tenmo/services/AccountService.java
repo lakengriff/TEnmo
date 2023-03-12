@@ -18,7 +18,6 @@ import java.util.Map;
 public class AccountService {
     private final String baseUrl;
     private final RestTemplate restTemplate = new RestTemplate();
-
     private  String authToken = null;
 
     public AccountService(String url) {
@@ -93,50 +92,9 @@ public class AccountService {
         return result;
     }
 
-//    public String getUsernameByAccountId(Account account){
-//        String result = null;
-//        try{
-//            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/request-username", HttpMethod.GET, makeAccountEntity(account), String.class);
-//            result = response.getBody();
-//        } catch (RestClientResponseException | ResourceAccessException e) {
-//            BasicLogger.log(e.getMessage());
-//        }
-//        return result;
-//    }
-
-//    public int getAccountIdByUser(User user){
-//        int accountId = -1;
-//        try{
-//            ResponseEntity<Account> response = restTemplate.exchange(baseUrl + "account/user-to-account", HttpMethod.GET, makeUserEntity(user), Account.class);
-//            Account account = response.getBody();
-//            if(account != null) {
-//                accountId = account.getAccountId();
-//            }
-//        } catch (RestClientResponseException | ResourceAccessException e) {
-//            BasicLogger.log(e.getMessage());
-//        }
-//        return accountId;
-//    }
-
-
     private HttpEntity<Void> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
         return new HttpEntity<>(headers);
     }
-
-    private HttpEntity<User> makeUserEntity(User user) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(user, headers);
-    }
-
-    private HttpEntity<Account> makeAccountEntity(Account account) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(account, headers);
-    }
-
 }

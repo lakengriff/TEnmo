@@ -24,7 +24,5 @@ public interface AccountDao {
 
     public String getUsernameByAccountId (int accountId);
 
-//    public Account getAccountByUser(int userId);
-
     public List<Account> viewAccountsToTransferBetween(String userName);
 }

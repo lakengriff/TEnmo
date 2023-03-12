@@ -12,8 +12,6 @@ public interface TransferDao {
 
     boolean changeRequestStatus (Transfer transfer);
 
-//    boolean rejectRequest(Transfer transfer);
-
     boolean transferMoney(Transfer transfer);
 
     Transfer transferDetails(int transferId);

@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 public class TransferService {
     private final String baseUrl;
     private final RestTemplate restTemplate = new RestTemplate();
-
     private  String authToken = null;
 
     public TransferService(String url) {
@@ -25,7 +24,7 @@ public class TransferService {
     public int createRequest(Transfer newTransfer){
         int returnedTransferId = 0;
         try{
-            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "account/transfer/", HttpMethod.POST, makeTransferEntity(newTransfer), Integer.class);
+            ResponseEntity<Integer> response = restTemplate.exchange(baseUrl + "transfer/", HttpMethod.POST, makeTransferEntity(newTransfer), Integer.class);
             returnedTransferId = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException | NullPointerException e) {
             BasicLogger.log(e.getMessage());
@@ -35,7 +34,7 @@ public class TransferService {
     public boolean changeRequestStatus(Transfer updatedTransfer){
         boolean success = false;
         try{
-            restTemplate.put(baseUrl + "account/transfer/update-request-status", makeTransferEntity(updatedTransfer));
+            restTemplate.put(baseUrl + "transfer/update-request-status", makeTransferEntity(updatedTransfer));
             success = true;
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -46,7 +45,7 @@ public class TransferService {
     public Transfer getTransferDetails(int transferId) {
         Transfer transfer = null;
         try {
-            ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "account/transfer/transfer-details/" + transferId, HttpMethod.GET, makeAuthEntity(), Transfer.class);
+            ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "transfer/transfer-details/" + transferId, HttpMethod.GET, makeAuthEntity(), Transfer.class);
             transfer = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -56,7 +55,7 @@ public class TransferService {
     public String getOtherUserName(int transferId){
         String username = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/other-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "transfer/other-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
             username = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -67,7 +66,7 @@ public class TransferService {
     public String getFromUserName(int transferId){
         String username = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/from-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "transfer/from-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
             username = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -78,7 +77,7 @@ public class TransferService {
     public String getToUserName(int transferId){
         String username = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "account/transfer/to-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
+            ResponseEntity<String> response = restTemplate.exchange(baseUrl + "transfer/to-username/" + transferId, HttpMethod.GET, makeAuthEntity(), String.class);
             username = response.getBody();
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());

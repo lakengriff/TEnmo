@@ -124,13 +124,14 @@ public class App {
                 System.out.println(transfer.getTransferId() + "          To: " + transferService.getOtherUserName(transfer.getTransferId()) + "          " + "$" + transfer.getAmount());
             }
         }
+
         int targetId = -1;
         while (targetId != 0) {
             targetId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
             if (transferIds.contains(targetId)) {
                 getTransferDetails(targetId);
                 targetId = 0;
-            } else {
+            } else if (targetId != 0){
                 System.out.println("Invalid ID. Please try again.");
             }
         }
@@ -154,7 +155,7 @@ public class App {
             targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
             if (transferIds.contains(targetId)) {
                 targetId = changeRequestStatus(transferService.getTransferDetails(targetId));
-            } else{
+            } else if (targetId != 0){
                 System.out.println("Invalid ID. Try again.");
             }
         }
@@ -179,45 +180,12 @@ public class App {
                 transfer.setTransferStatusId(TRANSFER_STATUS_REJECTED_CODE);
                 transferService.changeRequestStatus(transfer);
                 pendingMenuSelection = 0;
-            }else {
+            }else if (pendingMenuSelection != 0){
                 System.out.println("Invalid input, please try again.");
             }
         }
         return 0;
     }
-
-//        int targetId = -1;
-//        while (targetId != 0){
-//            targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
-//            if(transferIds.contains(targetId)){
-//                Transfer transferToUpdate = transferService.getTransferDetails(targetId);
-//                int pendingMenuSelection = -1;
-//                while(pendingMenuSelection != 0){
-//                    consoleService.printPendingMenu();
-//                    pendingMenuSelection = consoleService.promptForInt("Please choose an option: ");
-//                    switch (pendingMenuSelection){
-//                        case 1:
-//                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_APPROVED_CODE);
-//                            transferService.changeRequestStatus(transferToUpdate);
-//                            pendingMenuSelection = 0;
-//                            break;
-//                        case 2:
-//                            transferToUpdate.setTransferStatusId(TRANSFER_STATUS_REJECTED_CODE);
-//                            transferService.changeRequestStatus(transferToUpdate);
-//                            pendingMenuSelection = 0;
-//                            break;
-//                        default:
-//                            System.out.println("Invalid option. Please try again.");
-//                            break;
-//                    }
-//                }
-//                targetId = 0;
-//            } else {
-//                System.out.println("Invalid ID. Please try again.");
-//            }
-//        }
-
-
 
 	private void sendBucks() {
         printOtherUsers();
@@ -239,7 +207,7 @@ public class App {
                         }
                     }
                 }
-                if(account == null) {
+                if(account == null && userId != 0) {
                     System.out.println("Invalid ID. Try again.");
                 }
             }
@@ -261,7 +229,7 @@ public class App {
                     userId = 0;
                     }
             }
-            if(account == null) {
+            if(account == null && userId != 0) {
                 System.out.println("Invalid ID. Try again.");
             }
         }

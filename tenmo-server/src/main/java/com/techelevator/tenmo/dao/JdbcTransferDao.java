@@ -48,19 +48,6 @@ public class JdbcTransferDao implements TransferDao {
         return success;
     }
 
-//    @Override
-//    public boolean rejectRequest(Transfer transfer){
-//        boolean success = false;
-//        try{
-//            String sql = "UPDATE transfer_status SET transfer_status_id = (SELECT transfer_status_id FROM transfer_status WHERE transfer_status_desc = 'Rejected') WHERE transaction_id = ?";
-//            jdbcTemplate.update(sql, transfer.getTransferId());
-//            success = true;
-//        } catch (IllegalArgumentException e){
-//            System.out.println(e.getMessage());
-//        }
-//        return success;
-//    }
-
     @Override
     public boolean transferMoney(Transfer transfer) {
         boolean success = false;

@@ -43,14 +43,12 @@ public class AccountController {
         return accountService.viewPendingTransferService(principal.getName());
     }
 
-
-
     @RequestMapping(path = "get-account-id", method = RequestMethod.GET)
     public int accountId(Principal principal){
         return dao.findAccountIdByUsername(principal.getName());
     }
 
-    @RequestMapping(path = "request-users")
+    @RequestMapping(path = "request-users", method = RequestMethod.GET)
     public List<User> getUsersToTransferBetween(Principal principal){
         return dao.viewUsersToSendTo(principal.getName());
     }
@@ -59,11 +57,6 @@ public class AccountController {
     public String getUsernameFromAccountId(@RequestBody int accountId){
         return dao.getUsernameByAccountId(accountId);
     }
-
-//    @RequestMapping(path = "user-to-account", method = RequestMethod.GET)
-//    public Account getAccountFromUser(@RequestBody User user){
-//        return dao.getAccountByUser(user.getId());
-//    }
 
     @RequestMapping(path = "request-accounts", method = RequestMethod.GET)
     public List<Account> getAccountsToTransferBetween(Principal principal){
