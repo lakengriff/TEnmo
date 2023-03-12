@@ -153,14 +153,36 @@ public class App {
         }
             targetId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
             if (transferIds.contains(targetId)) {
-                targetId = changeRequestStatus();
+                targetId = changeRequestStatus(transferService.getTransferDetails(targetId));
             } else{
                 System.out.println("Invalid ID. Try again.");
             }
         }
     }
 
-    public int changeRequestStatus(){
+    private int changeRequestStatus(Transfer transfer){
+        BigDecimal balance = accountService.viewBalance();
+        int pendingMenuSelection = -1;
+        while(pendingMenuSelection != 0){
+            consoleService.printPendingMenu();
+            pendingMenuSelection = consoleService.promptForInt("Please choose an option: ");
+            if(pendingMenuSelection == 1){
+                if(balance.compareTo(transfer.getAmount()) > -1) {
+                    transfer.setTransferStatusId(TRANSFER_STATUS_APPROVED_CODE);
+                    transferService.changeRequestStatus(transfer);
+                    pendingMenuSelection = 0;
+                }
+                else {
+                    System.out.println("Insufficient funds.");
+                }
+            }else if (pendingMenuSelection == 2){
+                transfer.setTransferStatusId(TRANSFER_STATUS_REJECTED_CODE);
+                transferService.changeRequestStatus(transfer);
+                pendingMenuSelection = 0;
+            }else {
+                System.out.println("Invalid input, please try again.");
+            }
+        }
         return 0;
     }
 

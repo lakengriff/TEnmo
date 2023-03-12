@@ -38,15 +38,12 @@ public class TransferService {
         if(transfer.getAccountFromId() == jdbcAccountDao.findAccountIdByUsername(username)) {
             Account fromAccount = jdbcAccountDao.getAccountById(transfer.getAccountFromId());
             if (transfer.getAccountFromId() != transfer.getAccountToId()) {
-                if (transfer.getTransferStatusId() == 3 || (fromAccount.getBalance().compareTo(transfer.getAmount()) > -1)) {
-                    return jdbcTransferDao.changeRequestStatus(transfer);
+                return jdbcTransferDao.changeRequestStatus(transfer);
                 }
                 return false;
             }
             return false;
         }
-        return false;
-    }
 
     public String getOtherUsernameService(int transferId, String username){
         int selfAccountId = jdbcAccountDao.findAccountIdByUsername(username);

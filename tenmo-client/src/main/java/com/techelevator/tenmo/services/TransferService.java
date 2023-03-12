@@ -35,7 +35,7 @@ public class TransferService {
     public boolean changeRequestStatus(Transfer updatedTransfer){
         boolean success = false;
         try{
-            restTemplate.put(baseUrl + "account/transfer", makeTransferEntity(updatedTransfer));
+            restTemplate.put(baseUrl + "account/transfer/update-request-status", makeTransferEntity(updatedTransfer));
             success = true;
         }catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
